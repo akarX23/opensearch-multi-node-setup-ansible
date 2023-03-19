@@ -20,7 +20,7 @@ Both the options provide customizations of the openseach.yml configuration file.
 ### Initial steps
 - clone the repository
 ```
-git clone https://github.com/akarX23/opensearch-multi-node-automation.git
+git clone https://github.com/akarX23/opensearch-multi-node-setup-ansible.git
 cd opensearch-multi-node-automation
 ```
 - Generate the hosts.yaml file. This will be inventory file for the Ansible deployment.
