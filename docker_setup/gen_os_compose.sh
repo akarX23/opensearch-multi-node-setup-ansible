@@ -31,6 +31,11 @@ case $key in
     shift # past argument
     shift # past value
     ;;
+    --user)
+    USER="$2"
+    shift # past argument
+    shift # past value
+    ;;
     *)    # unknown option
     echo "Unknown option: $1"
     exit 1
@@ -67,7 +72,7 @@ services:
         soft: 65536 # Maximum number of open files for the opensearch user - set to at least 65536
         hard: 65536
     volumes:
-      - $HOME/data:/usr/share/opensearch/data # Creates volume called opensearch-data1 and mounts it to the container
+      - /home/${USER}/data:/usr/share/opensearch/data # Creates volume called opensearch-data1 and mounts it to the container
     ports:
       - 9200:9200 # REST API
       - 9600:9600 # Performance Analyzer

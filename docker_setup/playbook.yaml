@@ -6,10 +6,9 @@
     - name: Copy docker install script to remote hosts
       copy:
         src: configure_docker.sh
-        dest: "~/configure_docker.sh"
+        dest: "/home/{{ ansible_user }}/configure_docker.sh"
         mode: "u+x"
       tags: docker
-      become_user: "{{ ansible_user }}"
 
     - name: Execute docker install script
       become_user: root
@@ -62,31 +61,31 @@
 
     - name: Create data directory for opensearch
       file:
-        path: "~/data"
+        path: "/home/{{ ansible_user }}/data"
         state: directory
         mode: "0777"
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
       become: true
-      become_user: "{{ ansible_user }}"
+      become_user: root
 
     - name: Generate opensearch compose file
-      become_user: "{{ ansible_user }}"
       script: |
         ./gen_os_compose.sh \
         --cluster "{{ cluster_name | default('os-cluster') }}"  \
         --node os-"{{ inventory_hostname }}"  \
         --roles "{{ 'cluster_manager' if 'manager' in inventory_hostname else 'data,ingest' }}"  \
         --managers "{% for host in groups['cluster_manager'] %}{{ hostvars[host]['ansible_host'] }}{% if not loop.last %},{% endif %}{% endfor %}"  \
-        --data "{% for host in groups['cluster_data'] %}{{ hostvars[host]['ansible_host'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+        --data "{% for host in groups['cluster_data'] %}{{ hostvars[host]['ansible_host'] }}{% if not loop.last %},{% endif %}{% endfor %}" \
+        --user "{{ ansible_user }}"
 
     - name: Change permission of opensearch compose file
       file:
-        path: ~/docker-compose.yml
+        path: /home/{{ ansible_user }}/docker-compose.yml
         mode: "0755"
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
-      become_user: "{{ ansible_user }}"
+      become_user: root
       become: true
 
     - name: Install opensearch with docker compose

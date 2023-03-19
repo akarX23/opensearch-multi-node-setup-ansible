@@ -5,16 +5,14 @@
   tasks:
     - name: Create data directory for opensearch
       file:
-        path: "~/dashboard"
+        path: "/home/{{ ansible_user }}/dashboard"
         state: directory
         mode: "0777"
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
       become: true
-      become_user: "{{ ansible_user }}"
 
     - name: Generate dashboard compose file
-      become_user: "{{ ansible_user }}"
       script: |
         ./gen_dashboard_compose.sh \
         --managers  "{% for host in groups['all'] %}{{ hostvars[host]['ansible_host'] }}{% if not loop.last %},{% endif %}{% endfor %}"
@@ -23,16 +21,14 @@
 
     - name: Change permission of dashboard compose file
       file:
-        path: ~/data/docker-compose.yml
+        path: /home/{{ ansible_user }}/dashboard/docker-compose.yml
         mode: "0755"
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
-      become_user: "{{ ansible_user }}"
       become: true
 
     - name: Install opensearch dashboard with docker compose
       tags: docker
-      become_user: "{{ ansible_user }}"
       command: docker compose up -d
       args:
         chdir: "/home/{{ ansible_user }}/dashboard"
