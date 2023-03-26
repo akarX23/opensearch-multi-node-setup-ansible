@@ -139,4 +139,17 @@ This is a tool which can test workloads against your Opensearch cluster and give
 ```
 This will setup JAVA 14 by default. You can read about running the tool [here](https://github.com/opensearch-project/opensearch-benchmark).
 
+## Helpful Links for Opensearch usage
+### Ingestion
+- Normal doc – https://github.com/opensearch-project/documentation-website/blob/2.4/assets/examples/ecommerce-field_mappings.json (defining mapping)
+-	Parent child – https://opensearch.org/docs/2.4/opensearch/supported-field-types/join/ (It talks about how to define a parent-child relationship mapping)
+### Search
+-	Normal search – https://opensearch.org/docs/1.2/opensearch/rest-api/search/
+-	SQL based search – https://opensearch.org/docs/2.0/search-plugins/sql/full-text/ 
+### Custom workload for benchmark 
+-	StackOverflow dataset
+-	SQL for aggregation (custom benchmark) – https://betterprogramming.pub/tired-of-troubleshooting-idle-search-resources-use-opensearch-benchmark-for-performance-tuning-d4277c9f724 (how to run custom benchmark)
+### Quick start guide to create an index and search
+- Overview - https://opensearch.org/docs/2.4/quickstart/
+
 That's all the configuration this repository supports right now! If you have any doubts, feel free to contact me. If you want to make any contributions, you are free to do so! Thank you!
