@@ -33,6 +33,7 @@
         search_string: "export no_proxy"
         state: present
       tags: proxy
+      ignore_errors: true
       become_user: root
 
     - name: Update NO_PROXY setting
@@ -42,6 +43,7 @@
         search_string: "export NO_PROXY"
         state: present
       tags: proxy
+      ignore_errors: true
       become_user: root
 
     - name: Generate the config file for opensearch
