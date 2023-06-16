@@ -1,0 +1,40 @@
+- name: Setup Opensearch dashboards
+  hosts: cluster_manager
+  become: true
+
+  tasks:
+    - name: Install Opensearch Dasboard through .deb package
+      script: ./install_os_dashboards.sh
+      become_user: ubuntu
+      become: true
+
+    - name: Update no_proxy setting
+      lineinfile:
+        path: /etc/profile.d/proxy_setup.sh
+        line: "export no_proxy=127.0.0.1,localhost,{% for host in groups['all'] %}{{ hostvars[host]['ansible_host'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+        search_string: "export no_proxy"
+        state: present
+      tags: proxy
+      ignore_errors: true
+      become_user: root
+
+    - name: Update NO_PROXY setting
+      lineinfile:
+        path: /etc/profile.d/proxy_setup.sh
+        line: "export NO_PROXY=127.0.0.1,localhost,{% for host in groups['all'] %}{{ hostvars[host]['ansible_host'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+        search_string: "export NO_PROXY"
+        state: present
+      tags: proxy
+      ignore_errors: true
+      become_user: root
+
+    - name: Generate the config file for opensearch dashboards
+      script: |
+        ./gen_os_dashboard_config.sh \
+        --managers "{% for host in groups['cluster_manager'] %}{{ hostvars[host]['ansible_host'] }}{% if not loop.last %},{% endif %}{% endfor %}"
+
+    - name: Start and enable opensearch-dashboards service
+      systemd:
+        name: opensearch-dashboards.service
+        state: started
+        enabled: yes
