@@ -5,6 +5,7 @@
   tasks:
     - name: Install Opensearch through .deb package
       script: ./install_opensearch_manual.sh
+      become_user: ubuntu
       become: true
 
     - name: Turn off swap
